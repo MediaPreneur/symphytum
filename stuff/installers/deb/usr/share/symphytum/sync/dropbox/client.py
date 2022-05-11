@@ -233,7 +233,7 @@ class DropboxClient(object):
                   and it will never be overwritten if you send a less-recent one.
             """
 
-            path = "/commit_chunked_upload/%s%s" % (self.client.session.root, format_path(path))
+            path = f"/commit_chunked_upload/{self.client.session.root}{format_path(path)}"
 
             params = dict(
                 overwrite = bool(overwrite),
@@ -338,7 +338,7 @@ class DropboxClient(object):
         Note: In Python versions below version 2.6, httplib doesn't handle file-like objects.
         In that case, this code will read the entire file into memory (!).
         """
-        path = "/files_put/%s%s" % (self.session.root, format_path(full_path))
+        path = f"/files_put/{self.session.root}{format_path(full_path)}"
 
         params = {
             'overwrite': bool(overwrite),
@@ -382,7 +382,7 @@ class DropboxClient(object):
               - 404: No file was found at the given path, or the file that was there was deleted.
               - 200: Request was okay but response was malformed in some way.
         """
-        path = "/files/%s%s" % (self.session.root, format_path(from_path))
+        path = f"/files/{self.session.root}{format_path(from_path)}"
 
         params = {}
         if rev is not None:
@@ -503,7 +503,7 @@ class DropboxClient(object):
               ``{"expires":"Fri, 31 Jan 2042 21:01:05 +0000", "copy_ref":"z1X6ATl6aWtzOGq0c3g5Ng"}``
 
         """
-        path = "/copy_ref/%s%s" % (self.session.root, format_path(from_path))
+        path = f"/copy_ref/{self.session.root}{format_path(from_path)}"
 
         url, params, headers = self.request(path, {}, method='GET')
 
@@ -731,7 +731,7 @@ class DropboxClient(object):
               - 404: No file was found at given path.
               - 406: Too many file entries to return.
         """
-        path = "/metadata/%s%s" % (self.session.root, format_path(path))
+        path = f"/metadata/{self.session.root}{format_path(path)}"
 
         params = {'file_limit': file_limit,
                   'list': 'true',
@@ -775,7 +775,7 @@ class DropboxClient(object):
         """
         assert format in ['JPEG', 'PNG'], "expected a thumbnail format of 'JPEG' or 'PNG', got %s" % format
 
-        path = "/thumbnails/%s%s" % (self.session.root, format_path(from_path))
+        path = f"/thumbnails/{self.session.root}{format_path(from_path)}"
 
         url, params, headers = self.request(path, {'size': size, 'format': format}, method='GET', content_server=True)
         return self.rest_client.request("GET", url, headers=headers, raw_response=True)
@@ -830,7 +830,7 @@ class DropboxClient(object):
             - A dropbox.rest.ErrorResponse with an HTTP status of
               - 400: Bad request (may be due to many things; check e.error for details)
         """
-        path = "/search/%s%s" % (self.session.root, format_path(path))
+        path = f"/search/{self.session.root}{format_path(path)}"
 
         params = {
             'query': query,
@@ -863,7 +863,7 @@ class DropboxClient(object):
               - 400: Bad request (may be due to many things; check e.error for details)
               - 404: No revisions were found at the given path.
         """
-        path = "/revisions/%s%s" % (self.session.root, format_path(path))
+        path = f"/revisions/{self.session.root}{format_path(path)}"
 
         params = {
             'rev_limit': rev_limit,
@@ -892,7 +892,7 @@ class DropboxClient(object):
               - 400: Bad request (may be due to many things; check e.error for details)
               - 404: Unable to find the file at the given revision.
         """
-        path = "/restore/%s%s" % (self.session.root, format_path(path))
+        path = f"/restore/{self.session.root}{format_path(path)}"
 
         params = {
             'rev': rev,
@@ -928,7 +928,7 @@ class DropboxClient(object):
               - 400: Bad request (may be due to many things; check e.error for details)
               - 404: Unable to find the file at the given path.
         """
-        path = "/media/%s%s" % (self.session.root, format_path(path))
+        path = f"/media/{self.session.root}{format_path(path)}"
 
         url, params, headers = self.request(path, method='GET')
 
@@ -959,7 +959,7 @@ class DropboxClient(object):
               - 400: Bad request (may be due to many things; check e.error for details)
               - 404: Unable to find the file at the given path.
         """
-        path = "/shares/%s%s" % (self.session.root, format_path(path))
+        path = f"/shares/{self.session.root}{format_path(path)}"
 
         url, params, headers = self.request(path, method='GET')
 

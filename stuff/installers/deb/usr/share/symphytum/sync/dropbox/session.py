@@ -128,7 +128,7 @@ class DropboxSession(object):
         Returns:
             - The full API URL.
         """
-        return "https://%s%s" % (host, self.build_path(target, params))
+        return f"https://{host}{self.build_path(target, params)}"
 
     def build_authorize_url(self, request_token, oauth_callback=None):
         """Build a request token authorization URL.
@@ -221,11 +221,7 @@ class DropboxSession(object):
               and params is a dictionary like the one that was passed in, but augmented with
               oauth-related parameters as appropriate.
         """
-        if params is None:
-            params = {}
-        else:
-            params = params.copy()
-
+        params = {} if params is None else params.copy()
         oauth_params = {
             'oauth_consumer_key' : self.consumer_creds.key,
             'oauth_timestamp' : self._generate_oauth_timestamp(),
@@ -246,10 +242,14 @@ class DropboxSession(object):
 
     @classmethod
     def _oauth_sign_request(cls, params, consumer_pair, token_pair):
-        params.update({'oauth_signature_method' : 'PLAINTEXT',
-                       'oauth_signature' : ('%s&%s' % (consumer_pair.secret, token_pair.secret)
-                                            if token_pair is not None else
-                                            '%s&' % (consumer_pair.secret,))})
+        params.update(
+            {
+                'oauth_signature_method': 'PLAINTEXT',
+                'oauth_signature': f'{consumer_pair.secret}&{token_pair.secret}'
+                if token_pair is not None
+                else f'{consumer_pair.secret}&',
+            }
+        )
 
     @classmethod
     def _generate_oauth_timestamp(cls):
@@ -257,7 +257,7 @@ class DropboxSession(object):
 
     @classmethod
     def _generate_oauth_nonce(cls, length=8):
-        return ''.join([str(random.randint(0, 9)) for i in range(length)])
+        return ''.join([str(random.randint(0, 9)) for _ in range(length)])
 
     @classmethod
     def _oauth_version(cls):

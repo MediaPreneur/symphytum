@@ -18,10 +18,7 @@ def analyze_file_obj(obj):
                   raw_data: If not None, the entire contents of the stream (as a string).
                             None if the stream should be read() in chunks.
     """
-    pos = 0
-    if hasattr(obj, 'tell'):
-        pos = obj.tell()
-
+    pos = obj.tell() if hasattr(obj, 'tell') else 0
     # Handle cStringIO and StringIO
     if hasattr(obj, 'getvalue'):
         # Why using getvalue() makes sense:
@@ -31,11 +28,10 @@ def analyze_file_obj(obj):
         raw_data = obj.getvalue()
         if pos == 0:
             return (len(raw_data), raw_data)
-        else:
-            # We could return raw_data[pos:], but that could drastically
-            # increase memory usage. Better to read it block at a time.
-            size = max(0, len(raw_data) - pos)
-            return (size, None)
+        # We could return raw_data[pos:], but that could drastically
+        # increase memory usage. Better to read it block at a time.
+        size = max(0, len(raw_data) - pos)
+        return (size, None)
 
     # Handle real files
     if hasattr(obj, 'fileno'):

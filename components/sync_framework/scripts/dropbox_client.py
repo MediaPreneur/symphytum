@@ -27,18 +27,15 @@ sys.stdout=Unbuffered(sys.stdout)
 
 # Get request token
 def get_request_token(sess):
-	request_token = sess.obtain_request_token()
-	return request_token
+   return sess.obtain_request_token()
 
 # Get the authorization URL to link a Dropbox account
 def get_authorize_url(sess, request_token):
-	url = sess.build_authorize_url(request_token)
-	return url
+   return sess.build_authorize_url(request_token)
 
 # Get access token for API access
 def get_access_token(sess, request_token):
-	access_token = sess.obtain_access_token(request_token)
-	return access_token
+   return sess.obtain_access_token(request_token)
 
 # Get user name
 def get_user_name(dclient):

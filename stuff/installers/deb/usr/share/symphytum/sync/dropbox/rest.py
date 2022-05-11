@@ -304,14 +304,17 @@ class ErrorResponse(Exception):
     def __str__(self):
         if self.user_error_msg and self.user_error_msg != self.error_msg:
             # one is translated and the other is English
-            msg = "%s (%s)" % (self.user_error_msg, self.error_msg)
+            msg = f"{self.user_error_msg} ({self.error_msg})"
         elif self.error_msg:
             msg = self.error_msg
         elif not self.body:
             msg = self.reason
         else:
-            msg = "Error parsing response body or headers: " +\
-                  "Body - %s Headers - %s" % (self.body, self.headers)
+            msg = (
+                "Error parsing response body or headers: "
+                + f"Body - {self.body} Headers - {self.headers}"
+            )
+
 
         return "[%d] %s" % (self.status, repr(msg))
 
